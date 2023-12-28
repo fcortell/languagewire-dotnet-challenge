@@ -21,12 +21,12 @@ namespace UserService.Infrastructure
         {
             if (configuration.GetValue<bool>("UseInMemoryDatabase"))
             {
-                services.AddDbContext<ApplicationDbContext>(options =>
+                services.AddDbContext<Persistence.ApplicationDbContext>(options =>
                     options.UseInMemoryDatabase("Database"));
             }
             else
             {
-                services.AddDbContext<ApplicationDbContext>(options =>
+                services.AddDbContext<Persistence.ApplicationDbContext>(options =>
                     options.UseSqlServer(
                         configuration.GetConnectionString("Database"),
                         options
