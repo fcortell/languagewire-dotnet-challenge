@@ -1,4 +1,6 @@
-﻿namespace UserService.API.Contract.Users;
+﻿using UserService.Domain.Entities;
+
+namespace UserService.API.Contract.Users;
 
 public class UserResponse
 {

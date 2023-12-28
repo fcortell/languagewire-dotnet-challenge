@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using UserService.Domain.Entities;
 
 namespace UserService.Infrastructure.Persistence.Configuration
 {

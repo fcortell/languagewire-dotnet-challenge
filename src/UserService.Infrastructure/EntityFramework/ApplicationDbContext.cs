@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using UserService.Domain.Entities;
 
 namespace UserService.Infrastructure.EntityFramework;
 

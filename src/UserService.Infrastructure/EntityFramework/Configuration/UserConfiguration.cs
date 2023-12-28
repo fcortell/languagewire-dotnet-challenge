@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace UserService.Infrastructure.EntityFramework;
 
-public class UserConfiguration : IEntityTypeConfiguration<User>
+public class UserConfiguration : IEntityTypeConfiguration<UserOld>
 {
-	public void Configure(EntityTypeBuilder<User> builder)
+	public void Configure(EntityTypeBuilder<UserOld> builder)
 	{
 		builder.Property(u => u.Email).HasColumnName("Email");
 		builder.HasIndex(u => u.Email).IsUnique();

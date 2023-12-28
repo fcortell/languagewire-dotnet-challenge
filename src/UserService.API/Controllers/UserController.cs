@@ -4,6 +4,7 @@ using UserService.Application;
 using UserService.Application.Models;
 using UserService.Application.Ports;
 using Microsoft.AspNetCore.Mvc;
+using UserService.Domain.Entities;
 
 namespace UserService.API.Controllers;
 
@@ -37,6 +38,7 @@ public class UserController : ControllerBase
 		[FromRoute] long id,
 		[FromServices] IAsyncRepository repository)
 	{
+		// TODO: Do not expose domain entities to the API
 		var user = await repository.Get<User>(id);
 
 		return user is null

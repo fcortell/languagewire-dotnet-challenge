@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using UserService.Application.Models;
 using UserService.Application.Ports;
 using UserService.Domain.Core;
+using UserService.Domain.Entities;
 
 namespace UserService.Application;
 
@@ -25,12 +26,12 @@ public class UserCreator
 		if (!Regex.IsMatch(model.Email, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"))
 			throw new Exception("Email is invalid");
 
-		User.Repository = new UserRepository(repository); // Get user repository ready in User
+		UserOld.Repository = new UserRepository(repository); // Get user repository ready in User
 
 		User user;
 		try
 		{
-			user = User.Create(nameResult.Value, model.Email);
+			user = UserOld.Create(nameResult.Value, model.Email);
 		}
 		catch (Exception ex)
 		{
