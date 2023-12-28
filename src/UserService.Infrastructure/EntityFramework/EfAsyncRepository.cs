@@ -1,6 +1,7 @@
 ﻿using UserService.Application.Ports;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using UserService.Infrastructure.Persistence;
 
 namespace UserService.Infrastructure.EntityFramework;
 

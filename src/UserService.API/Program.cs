@@ -2,6 +2,7 @@ using UserService.API.ErrorResponseHandling;
 using UserService.API.Setup;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using UserService.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,10 +26,8 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();
 
-builder.Services.AddPersistence(builder.Configuration);
-builder.Services.AddApplicationServices(builder.Configuration);
-//if (EnableBackgroundJobs)
-//	builder.Services.AddBackgroundJobs(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
+
 
 var app = builder.Build();
 
@@ -41,9 +40,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.EnsurePersistenceIsReady();
-
-//if (EnableBackgroundJobs)
-//	app.ConfigureBackgroundJobs();
 
 Configuration = app.Configuration;
 
