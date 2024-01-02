@@ -8,10 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using UserService.Application.Common.Interfaces;
 using UserService.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using UserService.Domain.Users;
+using UserService.Infrastructure.Persistence.Repositories;
 using UserService.Infrastructure.Persistence;
-using UserService.Application.Ports;
-using UserService.Application;
-using UserService.Infrastructure.EntityFramework;
 
 namespace UserService.Infrastructure
 {
@@ -33,10 +32,11 @@ namespace UserService.Infrastructure
                         => options.EnableRetryOnFailure()));
             }
 
+            services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+
             services.AddTransient<IDateTime, DateTimeService>();
 
-            services.AddScoped(typeof(IAsyncRepository), typeof(EfAsyncRepository));
-            services.AddScoped<UserCreator>();
+            services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 
             return services;
         }

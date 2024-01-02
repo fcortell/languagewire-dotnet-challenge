@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using UserService.Domain.Entities;
+using UserService.Domain.Users.Entities;
 
 namespace UserService.Infrastructure.Persistence.Configuration
 {
@@ -14,12 +14,16 @@ namespace UserService.Infrastructure.Persistence.Configuration
 
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            builder.Property(u => u.Name).HasColumnName("Name");
+            builder.Property(u => u.Name)
+                    .IsRequired();
+            builder.HasIndex(u => u.Name);
+
             builder.Property(u => u.Email).HasColumnName("Email");
             builder.Property(u => u.Email)
                     .IsRequired();
             builder.HasIndex(u => u.Email).IsUnique();
 
-            builder.OwnsOne(u => u.Name).Property(e => e.Value).HasColumnName("Name");
         }
     }
 }

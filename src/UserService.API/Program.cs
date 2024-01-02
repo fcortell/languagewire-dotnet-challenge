@@ -3,6 +3,7 @@ using UserService.API.Setup;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using UserService.Infrastructure;
+using UserService.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();
 
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
 
 
 var app = builder.Build();
