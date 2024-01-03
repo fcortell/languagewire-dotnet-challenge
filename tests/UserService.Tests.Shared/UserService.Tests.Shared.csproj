@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Using Include="UserService.Domain" />
-    <Using Include="CSharpFunctionalExtensions" />
     <Using Include="System.Collections.Generic" />
     <Using Include="System.IO" />
     <Using Include="System.Linq" />

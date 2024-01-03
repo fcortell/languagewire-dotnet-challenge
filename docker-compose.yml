@@ -22,7 +22,7 @@ services:
        condition: service_healthy
   
   userservice_local_db:
-    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    image: "mcr.microsoft.com/mssql/server:2019-CU24-ubuntu-20.04"
     container_name: "userservice-local-db"
     ports:
       - "8003:1433"

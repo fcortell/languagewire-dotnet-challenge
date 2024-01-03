@@ -1,65 +1,62 @@
-using UserService.API.Contract;
-using UserService.API.Contract.Users;
-using UserService.Application;
-using UserService.Application.Models;
-using UserService.Application.Ports;
+﻿using FluentResults;
 using Microsoft.AspNetCore.Mvc;
+using UserService.Application.Users.Commands.CreateUser;
+using UserService.Application.Users.Queries;
+using UserService.Application.Common.Errors;
 
 namespace UserService.API.Controllers;
 
 [ApiController]
 [Route("users")]
-public class UserController : ControllerBase
+public class UserController : BaseController
 {
-	/// <summary>
-	/// Lists the existing users
-	/// </summary>
-	/// <response code="200">List of users</response>
-	[HttpGet]
-	[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserResponse>))]
-	public async Task<IActionResult> Get(
-		[FromServices] IAsyncRepository repository)
-	{
-		var users = await repository.GetAll<User>();
+    /// <summary>
+    /// Gets a user by ID
+    /// </summary>
+    /// <response code="200">The user</response>
+    /// <response code="404">User not found</response>
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetById(
+       [FromRoute] long id, CancellationToken cancellationToken)
+    {
+        GetUserByIdQuery query = new GetUserByIdQuery
+        {
+            UserId = id
+        };
 
-		return Ok(users.Select(u => UserResponse.From(u)));
-	}
+        Result<UserDTO> result = await Mediator.Send(query, cancellationToken);
+        if (result.IsSuccess)
+        {
+            return Ok(result.Value);
+        }
 
-	/// <summary>
-	/// Gets a user by ID
-	/// </summary>
-	/// <response code="200">The user</response>
-	/// <response code="404">User not found</response>
-	[HttpGet("{id}")]
-	[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserResponse))]
-	[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
-	public async Task<IActionResult> Get(
-		[FromRoute] long id,
-		[FromServices] IAsyncRepository repository)
-	{
-		var user = await repository.Get<User>(id);
+        return Problem();
+    }
 
-		return user is null
-			? NotFound(ErrorResponse.EntityNotFound())
-			: Ok(UserResponse.From(user));
-	}
+    /// <summary>
+    /// Creates a user
+    /// </summary>
+    /// <response code="200">ID of the created user</response>
+    /// <response code="400">Validation error</response>
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(long))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    [HttpPost]
+    public async Task<IActionResult> CreateUser(
+        [FromBody] CreateUserCommand command)
+    {
+        var result = await Mediator.Send(command);
 
-	/// <summary>
-	/// Creates a user
-	/// </summary>
-	/// <response code="200">ID of the created user</response>
-	/// <response code="400">Validation error</response>
-	[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(long))]
-	[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
-	[HttpPost]
-	public async Task<IActionResult> Post(
-		[FromBody] UserCreationRequest model,
-		[FromServices] UserCreator userCreator)
-	{
-		var result = await userCreator.Create(model);
-
-		return result.IsFailure
-			? BadRequest(ErrorResponse.From(result.Error))
-			: Ok(result.Value);
-	}
+        if (result.IsSuccess)
+        {
+            return Ok(result.Value);
+        }
+        var firstError = result.Errors.FirstOrDefault();
+        if (firstError is UniqueConstraintViolationError)
+        {
+            return Problem(detail: firstError.Message, statusCode: StatusCodes.Status409Conflict);
+        }
+        return Problem();
+    }
 }

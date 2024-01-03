@@ -1,11 +1,17 @@
+using UserService.Domain.Users.Entities;
+
 namespace UserService.Tests.Shared
 {
 	public class UserBuilder
 	{
 		private string email = UniqueEmailGenerator.Generate();
-		private Name name = Name.Create("Testy").Value;
+		private string name = "Testy";
 
-		public User Build() => new(name, email);
+		public User Build() => new User
+		{
+			Email = email,
+            Name = name
+        };
 
 		public UserBuilder WithEmail(string val)
 		{
@@ -13,7 +19,7 @@ namespace UserService.Tests.Shared
 			return this;
 		}
 
-		public UserBuilder WithName(Name val)
+		public UserBuilder WithName(string val)
 		{
 			name = val;
 			return this;

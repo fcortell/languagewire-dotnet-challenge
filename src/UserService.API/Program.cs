@@ -1,7 +1,10 @@
-using UserService.API.ErrorResponseHandling;
 using UserService.API.Setup;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using UserService.Infrastructure;
+using UserService.Application;
+using Microsoft.AspNetCore.Diagnostics;
+using UserService.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,19 +19,14 @@ builder.Services.AddControllers(options =>
 #if !DEBUG
 		options.Filters.Add<ExceptionHandlingFilter>();
 #endif
-	})
-	.ConfigureApiBehaviorOptions(options =>
-	{
-		options.InvalidModelStateResponseFactory = InvalidModelStateResponseFactory.Create;
 	});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();
 
-builder.Services.AddPersistence(builder.Configuration);
-builder.Services.AddApplicationServices(builder.Configuration);
-//if (EnableBackgroundJobs)
-//	builder.Services.AddBackgroundJobs(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
+
 
 var app = builder.Build();
 
@@ -39,11 +37,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
 app.MapControllers();
 app.EnsurePersistenceIsReady();
-
-//if (EnableBackgroundJobs)
-//	app.ConfigureBackgroundJobs();
 
 Configuration = app.Configuration;
 

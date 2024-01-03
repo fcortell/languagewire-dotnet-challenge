@@ -7,11 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CSharpFunctionalExtensions" Version="2.39.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Using Include="CSharpFunctionalExtensions" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
   </ItemGroup>
 
 </Project>

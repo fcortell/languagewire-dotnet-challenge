@@ -1,8 +1,8 @@
-using UserService.Infrastructure.EntityFramework;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RichardSzalay.MockHttp;
 using System.Net.Http;
+using UserService.Infrastructure.Persistence;
 
 namespace UserService.API.Test.Acceptance;
 
