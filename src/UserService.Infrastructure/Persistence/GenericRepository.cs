@@ -4,24 +4,24 @@ using UserService.Domain.Common;
 
 namespace UserService.Infrastructure.Persistence;
 // Base repository implementation for basic CRUD operations. Anything else should be implemented in corresponding repository.
-internal abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
+internal abstract class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
 {
     protected ApplicationDbContext DbContext;
     protected readonly DbSet<TEntity> Entities;
 
-    public Repository(ApplicationDbContext context)
+    public GenericRepository(ApplicationDbContext context)
     {
         DbContext = context;
         Entities = DbContext.Set<TEntity>();
 
     }
 
-    public async Task<TEntity?> GetByIdAsync(object id)
+    public async Task<TEntity?> GetByIdAsync(long id)
     {
-        return await Entities.FindAsync(id);
+        return await Entities.SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync()
+    public async Task<IEnumerable<TEntity?>> GetAllAsync()
     {
         return await Entities.AsQueryable().ToListAsync();
     }
@@ -40,13 +40,14 @@ internal abstract class Repository<TEntity> : IRepository<TEntity> where TEntity
         Entities.Remove(entity);
     }
 
-    public async Task CommitChanges()
+    public async Task CommitChangesAsync(CancellationToken cancellationToken)
     {
-        await DbContext.SaveChangesAsync();
+        await DbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
+    public IEnumerable<TEntity?> Find(Expression<Func<TEntity, bool>> predicate)
     {
-        throw new NotImplementedException();
+        return Entities.Where(predicate);
     }
+
 }

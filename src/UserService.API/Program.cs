@@ -1,9 +1,10 @@
-using UserService.API.ErrorResponseHandling;
 using UserService.API.Setup;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using UserService.Infrastructure;
 using UserService.Application;
+using Microsoft.AspNetCore.Diagnostics;
+using UserService.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,10 +19,6 @@ builder.Services.AddControllers(options =>
 #if !DEBUG
 		options.Filters.Add<ExceptionHandlingFilter>();
 #endif
-	})
-	.ConfigureApiBehaviorOptions(options =>
-	{
-		options.InvalidModelStateResponseFactory = InvalidModelStateResponseFactory.Create;
 	});
 
 builder.Services.AddEndpointsApiExplorer();
@@ -39,6 +36,8 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.MapControllers();
 app.EnsurePersistenceIsReady();

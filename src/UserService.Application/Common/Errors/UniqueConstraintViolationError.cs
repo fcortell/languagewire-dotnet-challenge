@@ -1,4 +1,6 @@
-namespace UserService.Domain.Core;
+using FluentResults;
+
+namespace UserService.Application.Common.Errors;
 
 public class UniqueConstraintViolationError : Error
 {
@@ -12,10 +14,8 @@ public class UniqueConstraintViolationError : Error
 	/// </summary>
 	public string Property { get; set; } = null!;
 
-	public UniqueConstraintViolationError(string message, string entity, string property)
-		: base(message)
+    public UniqueConstraintViolationError(string entity, string property)
 	{
-		Entity = entity;
-		Property = property;
+		Message = $"Unique constraint violation on {entity}.{property}";
 	}
 }

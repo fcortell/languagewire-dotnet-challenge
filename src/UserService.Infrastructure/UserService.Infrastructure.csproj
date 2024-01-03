@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="CSharpFunctionalExtensions" />
     <Using Include="UserService.Domain" />
   </ItemGroup>
 
