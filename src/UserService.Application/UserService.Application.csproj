@@ -27,4 +27,8 @@
     <Using Include="UserService.Domain" />
   </ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="UserService.Application.Tests.Unit" />
+	</ItemGroup>
+
 </Project>
