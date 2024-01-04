@@ -10,6 +10,8 @@ using FluentResults;
 using UserService.Application.Users.Queries;
 using UserService.Application.Users.Commands.CreateUser;
 using Microsoft.AspNetCore.Mvc;
+using UserService.Tests.Shared.Utils;
+using UserService.Tests.Shared.Users;
 
 namespace UserService.API.Test.Acceptance.StepDefinitions;
 
