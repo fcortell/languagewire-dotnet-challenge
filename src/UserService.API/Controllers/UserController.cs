@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using UserService.Application.Users.Commands.CreateUser;
 using UserService.Application.Users.Queries;
 using UserService.Application.Common.Errors;
+using UserService.Application.Users.Commands.UpdateUser;
 
 namespace UserService.API.Controllers;
 
@@ -56,6 +57,35 @@ public class UserController : BaseController
         if (firstError is UniqueConstraintViolationError)
         {
             return Problem(detail: firstError.Message, statusCode: StatusCodes.Status409Conflict);
+        }
+        return Problem();
+    }
+
+    /// <summary>
+    /// Updates a user
+    /// </summary>
+    /// <response code="200">UserDTO</response>
+    /// <response code="400">Validation error</response>
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    [HttpPut]
+    public async Task<IActionResult> UpdateUser(
+        [FromBody] UpdateUserCommand command)
+    {
+        var result = await Mediator.Send(command);
+
+        if (result.IsSuccess)
+        {
+            return Ok(result.Value);
+        }
+        var firstError = result.Errors.FirstOrDefault();
+        if (firstError is UniqueConstraintViolationError)
+        {
+            return Problem(detail: firstError.Message, statusCode: StatusCodes.Status409Conflict);
+        }
+        if (firstError is EntityNotFoundError)
+        {
+            return Problem(detail: firstError.Message, statusCode: StatusCodes.Status404NotFound);
         }
         return Problem();
     }
