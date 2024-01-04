@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,17 +12,21 @@ using UserService.Application.Common.Errors;
 using UserService.Application.Users.Commands.CreateUser;
 using UserService.Domain.Users;
 
-namespace UserService.Application.Tests.Unit.Users
+namespace UserService.Application.Tests.Unit.Users.CreateUser
 {
     public class CreateUserCommandHandlerTests
     {
         private readonly Mock<IUserRepository> _userRepositoryMock;
-        private readonly Mock<IMapper> _mapperMock;
+        private readonly IMapper _mapper;
 
         public CreateUserCommandHandlerTests()
         {
             _userRepositoryMock = new Mock<IUserRepository>();
-            _mapperMock = new Mock<IMapper>();
+            var mapperConfig = new MapperConfiguration(cfg =>
+            {
+
+            });
+            _mapper = mapperConfig.CreateMapper();
         }
 
         [Fact]
@@ -30,11 +35,12 @@ namespace UserService.Application.Tests.Unit.Users
             // Arrange
             var command = new CreateUserCommand
             {
+                Name = "Test",
                 Email = "test@test.com"
             };
 
-            var handler = new CreateUserCommandHandler(_userRepositoryMock.Object, _mapperMock.Object);
-            _userRepositoryMock.Setup(x => x.GetByEmailAsync(command.Email)).ReturnsAsync(new Domain.Users.Entities.User() { Email = command.Email});
+            var handler = new CreateUserCommandHandler(_userRepositoryMock.Object, _mapper);
+            _userRepositoryMock.Setup(x => x.GetByEmailAsync(command.Email)).ReturnsAsync(new Domain.Users.Entities.User() { Email = command.Email });
 
             // Act
             Result<long> result = await handler.Handle(command, CancellationToken.None);
@@ -50,10 +56,11 @@ namespace UserService.Application.Tests.Unit.Users
             // Arrange
             var command = new CreateUserCommand
             {
+                Name = "Test",
                 Email = "test@test.com"
             };
 
-            var handler = new CreateUserCommandHandler(_userRepositoryMock.Object, _mapperMock.Object);
+            var handler = new CreateUserCommandHandler(_userRepositoryMock.Object, _mapper);
             _userRepositoryMock.Setup(x => x.GetByEmailAsync(command.Email)).Callback(() => { return; });
 
             // Act
