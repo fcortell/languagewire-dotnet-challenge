@@ -4,7 +4,7 @@ using UserService.Domain.Common;
 
 namespace UserService.Infrastructure.Persistence;
 // Base repository implementation for basic CRUD operations. Anything else should be implemented in corresponding repository.
-internal abstract class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
+public abstract class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
 {
     protected ApplicationDbContext DbContext;
     protected readonly DbSet<TEntity> Entities;
@@ -45,9 +45,9 @@ internal abstract class GenericRepository<TEntity> : IGenericRepository<TEntity>
         await DbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public IEnumerable<TEntity?> Find(Expression<Func<TEntity, bool>> predicate)
+    public async Task<IEnumerable<TEntity?>> Find(Expression<Func<TEntity, bool>> predicate)
     {
-        return Entities.Where(predicate);
+        return await Entities.Where(predicate).ToListAsync();
     }
 
 }

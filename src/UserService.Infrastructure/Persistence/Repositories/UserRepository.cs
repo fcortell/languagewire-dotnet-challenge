@@ -9,7 +9,7 @@ using UserService.Domain.Users.Entities;
 
 namespace UserService.Infrastructure.Persistence.Repositories
 {
-    internal sealed class UserRepository : GenericRepository<User>, IUserRepository
+    public sealed class UserRepository : GenericRepository<User>, IUserRepository
     {
         // Add here any methods that you need for the repository, basic CRUD operations are already implemented in the generic repository
 

@@ -17,6 +17,12 @@ namespace UserService.Application.Users.Commands.CreateUser
                             
             RuleFor(v => v.Email)
                 .NotEmpty()
+                .NotNull()
+                .WithMessage("Email field can't be empty.");
+
+            RuleFor(v => v.Name)
+                .NotEmpty()
+                .NotNull()
                 .WithMessage("Email field can't be empty.");
         }
     }
