@@ -10,7 +10,7 @@ namespace UserService.Domain.Common
     public abstract class BaseEntity
     {
         // This can easily be modified to be BaseEntity<T> and public T Id to support different key types.
-        public long Id { get; private set; }
+        public long Id { get; set; }
 
         private readonly List<BaseEvent> _domainEvents = new();
 
