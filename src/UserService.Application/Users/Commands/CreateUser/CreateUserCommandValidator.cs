@@ -21,10 +21,6 @@ namespace UserService.Application.Users.Commands.CreateUser
                 .WithMessage("Email field can't be empty.");
 
             RuleFor(v => v.Name)
-                .Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")
-                .WithMessage("Email format invalid.");
-
-            RuleFor(v => v.Name)
                 .NotEmpty()
                 .NotNull()
                 .WithMessage("Email field can't be empty.");
