@@ -61,8 +61,6 @@ namespace UserService.Application.Users.Commands.CreateUser
 
             try
             {
-                entity.AddDomainEvent(new UserCreatedEvent(entity));
-
                 _userRepository.Insert(entity);
 
                 await _userRepository.CommitChangesAsync(cancellationToken);

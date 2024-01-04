@@ -14,12 +14,12 @@ using UserService.Domain.Users;
 
 namespace UserService.Application.Tests.Unit.Users.CreateUser
 {
-    public class CreateUserCommanValidatorTests
+    public class CreateUserCommandValidatorTests
     {
         private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly IMapper _mapper;
 
-        public CreateUserCommanValidatorTests()
+        public CreateUserCommandValidatorTests()
         {
             _userRepositoryMock = new Mock<IUserRepository>();
             var mapperConfig = new MapperConfiguration(cfg =>
