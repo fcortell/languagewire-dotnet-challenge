@@ -30,6 +30,14 @@ namespace UserService.Application.Users.Commands.CreateUser
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IMediator? _mediator;
+
+        public CreateUserCommandHandler(IUserRepository userRepository, IMapper mapper, IMediator mediator)
+        {
+            _userRepository = userRepository;
+            _mapper = mapper;
+            _mediator = mediator;
+        }
 
         public CreateUserCommandHandler(IUserRepository userRepository, IMapper mapper)
         {
@@ -58,6 +66,13 @@ namespace UserService.Application.Users.Commands.CreateUser
                 _userRepository.Insert(entity);
 
                 await _userRepository.CommitChangesAsync(cancellationToken);
+
+                if (_mediator is not null)
+                {
+                    await _mediator.Publish(new UserCreatedEvent(entity), cancellationToken);
+                }
+
+
                 return entity.Id;
             } catch (Exception ex)
             {
