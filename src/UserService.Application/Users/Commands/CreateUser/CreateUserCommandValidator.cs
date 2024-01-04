@@ -14,11 +14,15 @@ namespace UserService.Application.Users.Commands.CreateUser
             RuleFor(v => v.Email)
                 .MaximumLength(100)
                 .WithMessage("Email must not exceed 100 characters.");
-                            
+
             RuleFor(v => v.Email)
                 .NotEmpty()
                 .NotNull()
                 .WithMessage("Email field can't be empty.");
+
+            RuleFor(v => v.Email)
+                .Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")
+                .WithMessage("Email format invalid.");
 
             RuleFor(v => v.Name)
                 .NotEmpty()
