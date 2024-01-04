@@ -14,7 +14,7 @@ namespace UserService.Domain
         void Delete(TEntity entity);
         Task<TEntity?> GetByIdAsync(long id);
         Task<IEnumerable<TEntity?>> GetAllAsync();
-        IEnumerable<TEntity?> Find(Expression<Func<TEntity, bool>> predicate);
+        Task<IEnumerable<TEntity?>> Find(Expression<Func<TEntity, bool>> predicate);
         Task CommitChangesAsync(CancellationToken cancellationToken);
 
     }
