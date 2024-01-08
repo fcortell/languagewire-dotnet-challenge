@@ -15,10 +15,10 @@ namespace UserService.Infrastructure.Persistence.CacheRepositories
     // With that, we can inject additional behaviour, like a cache layer to the TierRepository, so that we can avoid unnecessary calls to the database and
     public class CachedTierRepository : ITierRepository
     {
-        private readonly ITierRepository _decorated;
+        private readonly TierRepository _decorated;
         private readonly IMemoryCache _cache;
 
-        public CachedTierRepository(ITierRepository decorated, IMemoryCache cache)
+        public CachedTierRepository(TierRepository decorated, IMemoryCache cache)
         {
             _decorated = decorated;
             _cache = cache;

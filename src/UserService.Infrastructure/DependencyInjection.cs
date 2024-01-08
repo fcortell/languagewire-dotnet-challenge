@@ -36,14 +36,14 @@ namespace UserService.Infrastructure
             }
 
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-
+            services.AddMemoryCache();
             services.AddTransient<IDateTime, DateTimeService>();
 
             services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
             services.AddScoped<TierRepository>();
             services.AddScoped<ITierRepository>(provider =>
             {
-                var tierRepository = provider.GetService<ITierRepository>()!;
+                var tierRepository = provider.GetService<TierRepository>()!;
                 return new CachedTierRepository(tierRepository, provider.GetService<IMemoryCache>()!);
             });
             return services;
