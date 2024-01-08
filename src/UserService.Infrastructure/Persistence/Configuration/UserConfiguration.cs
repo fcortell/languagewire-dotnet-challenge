@@ -24,8 +24,8 @@ namespace UserService.Infrastructure.Persistence.Configuration
                     .IsRequired();
             builder.HasIndex(u => u.Name);
 
-            builder.Property(u => u.Email).HasColumnName("TranslationBalance");
-
+            builder.Property(u => u.TranslationBalance).HasColumnName("TranslationBalance");
+            builder.Property(u => u.TotalSpentAmount).HasColumnName("TotalSpentAmount");
 
             builder.Property(u => u.Email).HasColumnName("Email");
             builder.Property(u => u.Email)

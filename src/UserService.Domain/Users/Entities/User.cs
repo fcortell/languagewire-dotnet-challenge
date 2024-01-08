@@ -13,7 +13,8 @@ namespace UserService.Domain.Users.Entities
 
         public string? Email { get; set; } = string.Empty;
 
-        public int? TranslationBalance { get; set; } = 0;
+        public int TranslationBalance { get; set; } = 0;
+        public int TotalSpentAmount { get; set; } = 0;
 
     }
 }

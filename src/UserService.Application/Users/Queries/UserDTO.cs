@@ -16,6 +16,8 @@ namespace UserService.Application.Users.Queries
 
         public string? Email { get; init; }
 
+        public string Tier { get; set; } = string.Empty;
+
         private class Mapping : Profile
         {
             public Mapping()
