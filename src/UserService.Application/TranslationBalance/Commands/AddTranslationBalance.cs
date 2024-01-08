@@ -8,6 +8,7 @@ using FluentResults;
 using MediatR;
 using UserService.Application.Common.Errors;
 using UserService.Application.Users.Queries;
+using UserService.Domain.Tiers;
 using UserService.Domain.Users;
 using UserService.Domain.Users.Entities;
 
@@ -21,11 +22,13 @@ namespace UserService.Application.TranslationBalance.Commands
     public class AddTranslationBalanceHandler : IRequestHandler<AddTranslationBalanceCommand, Result<UserDTO>>
     {
         private readonly IUserRepository _userRepository;
+        private readonly ITierRepository _tierRepository;
         private readonly IMapper _mapper;
 
-        public AddTranslationBalanceHandler(IUserRepository userRepository, IMapper mapper)
+        public AddTranslationBalanceHandler(IUserRepository userRepository, ITierRepository tierRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _tierRepository = tierRepository;
             _mapper = mapper;
         }
 
@@ -39,13 +42,14 @@ namespace UserService.Application.TranslationBalance.Commands
 
             try
             {
+                var tier = await _tierRepository.GetTierByRangeAsync(user.TranslationBalance);
 
-            
-            user.TranslationBalance += request.Amount;
+
+                user.TranslationBalance += request.Amount;
             _userRepository.Update(user);
             await _userRepository.CommitChangesAsync(cancellationToken);
             UserDTO dto = _mapper.Map<UserDTO>(user);
-
+            dto.Tier = tier.Name;
             return dto;
         }
             catch (Exception ex)
