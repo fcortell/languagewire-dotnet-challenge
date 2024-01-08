@@ -14,13 +14,13 @@ namespace UserService.Application.Users.Queries
         public long UserId { get; init; }
     }
 
-    public class GetUsersQueryHandler : IRequestHandler<GetUserByIdQuery, Result<UserDTO>>
+    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Result<UserDTO>>
     {
         private readonly IMapper _mapper;
         private readonly ITierRepository _tierRepository;
         private readonly IUserRepository _userRepository;
 
-        public GetUsersQueryHandler(IUserRepository userRepository, ITierRepository tierRepository, IMapper mapper)
+        public GetUserByIdQueryHandler(IUserRepository userRepository, ITierRepository tierRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _tierRepository = tierRepository;
