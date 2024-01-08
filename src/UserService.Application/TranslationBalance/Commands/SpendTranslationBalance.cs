@@ -17,7 +17,7 @@ namespace UserService.Application.TranslationBalance.Commands
 
     }
 
-    public abstract class SpendTranslationBalanceHandler : IRequestHandler<SpendTranslationBalanceCommand, Result<UserDTO>>
+    public class SpendTranslationBalanceHandler : IRequestHandler<SpendTranslationBalanceCommand, Result<UserDTO>>
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;

@@ -21,7 +21,8 @@ public class TranslationBalanceController : BaseController
     /// <response code="400">Validation error</response>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    [HttpPut]
+    [HttpPost]
+    [Route(nameof(AddTranslationBalance))]
     public async Task<IActionResult> AddTranslationBalance(
         [FromBody] AddTranslationBalanceCommand command)
     {
@@ -46,7 +47,8 @@ public class TranslationBalanceController : BaseController
     /// <response code="400">Validation error</response>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    [HttpPut]
+    [HttpPost]
+    [Route(nameof(SpendTranslationBalance))]
     public async Task<IActionResult> SpendTranslationBalance(
         [FromBody] SpendTranslationBalanceCommand command)
     {
@@ -75,7 +77,8 @@ public class TranslationBalanceController : BaseController
     /// <response code="400">Validation error</response>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    [HttpPut]
+    [HttpPost]
+    [Route(nameof(SubstractTranslationBalance))]
     public async Task<IActionResult> SubstractTranslationBalance(
         [FromBody] SubstractTranslationBalanceCommand command)
     {
