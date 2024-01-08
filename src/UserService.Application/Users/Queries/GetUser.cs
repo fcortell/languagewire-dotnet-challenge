@@ -1,6 +1,4 @@
-﻿
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentResults;
 using MediatR;
 using UserService.Application.Common.Errors;
@@ -18,10 +16,9 @@ namespace UserService.Application.Users.Queries
 
     public class GetUsersQueryHandler : IRequestHandler<GetUserByIdQuery, Result<UserDTO>>
     {
-        private readonly IUserRepository _userRepository;
-        private readonly ITierRepository _tierRepository;
-
         private readonly IMapper _mapper;
+        private readonly ITierRepository _tierRepository;
+        private readonly IUserRepository _userRepository;
 
         public GetUsersQueryHandler(IUserRepository userRepository, ITierRepository tierRepository, IMapper mapper)
         {

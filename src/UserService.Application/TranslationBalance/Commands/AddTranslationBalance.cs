@@ -1,29 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentResults;
 using MediatR;
 using UserService.Application.Common.Errors;
 using UserService.Application.Users.Queries;
 using UserService.Domain.Tiers;
 using UserService.Domain.Users;
-using UserService.Domain.Users.Entities;
 
 namespace UserService.Application.TranslationBalance.Commands
 {
     public class AddTranslationBalanceCommand : UpdateTranslationBalanceCommand
     {
-
     }
 
     public class AddTranslationBalanceHandler : IRequestHandler<AddTranslationBalanceCommand, Result<UserDTO>>
     {
-        private readonly IUserRepository _userRepository;
-        private readonly ITierRepository _tierRepository;
         private readonly IMapper _mapper;
+        private readonly ITierRepository _tierRepository;
+        private readonly IUserRepository _userRepository;
 
         public AddTranslationBalanceHandler(IUserRepository userRepository, ITierRepository tierRepository, IMapper mapper)
         {
@@ -44,20 +37,18 @@ namespace UserService.Application.TranslationBalance.Commands
             {
                 var tier = await _tierRepository.GetTierByRangeAsync(user.TranslationBalance);
 
-
                 user.TranslationBalance += request.Amount;
-            _userRepository.Update(user);
-            await _userRepository.CommitChangesAsync(cancellationToken);
-            UserDTO dto = _mapper.Map<UserDTO>(user);
-            dto.Tier = tier.Name;
-            return dto;
-        }
+                _userRepository.Update(user);
+                await _userRepository.CommitChangesAsync(cancellationToken);
+                UserDTO dto = _mapper.Map<UserDTO>(user);
+                dto.Tier = tier.Name;
+                return dto;
+            }
             catch (Exception ex)
             {
                 Error error = new Error(ex.Message);
                 return Result.Fail<UserDTO>(error);
-
             }
-}
+        }
     }
 }

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using AutoMapper;
 using FluentAssertions;
 using FluentResults;
 using Moq;
 using UserService.Application.Common.Errors;
-using UserService.Application.Users.Commands.CreateUser;
 using UserService.Application.Users.Commands.UpdateUser;
 using UserService.Application.Users.Queries;
 using UserService.Domain.Users;
@@ -19,8 +13,8 @@ namespace UserService.Application.Tests.Unit.Users.UpdateUser
 {
     public class UpdateUserCommandHandlerTest
     {
-        private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly IMapper _mapper;
+        private readonly Mock<IUserRepository> _userRepositoryMock;
         private Fixture _fixture;
 
         public UpdateUserCommandHandlerTest()
@@ -29,7 +23,6 @@ namespace UserService.Application.Tests.Unit.Users.UpdateUser
             _userRepositoryMock = new Mock<IUserRepository>();
             var mapperConfig = new MapperConfiguration(cfg =>
             {
-
             });
             _mapper = mapperConfig.CreateMapper();
         }
@@ -46,7 +39,6 @@ namespace UserService.Application.Tests.Unit.Users.UpdateUser
             };
 
             var users = _fixture.CreateMany<User>(2).ToList();
-
 
             var handler = new UpdateUserCommandHandler(_userRepositoryMock.Object, _mapper);
             _userRepositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<long>())).ReturnsAsync((long i) => users.First(c => c.Id == users.First().Id));

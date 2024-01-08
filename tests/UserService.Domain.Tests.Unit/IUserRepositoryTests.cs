@@ -1,15 +1,7 @@
-﻿using Xunit;
-using UserService.Infrastructure.Persistence.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoFixture;
+using Moq;
 using UserService.Domain.Users;
 using UserService.Domain.Users.Entities;
-using UserService.Tests.Shared.Users;
-using Moq;
-using AutoFixture;
 
 namespace UserService.Domain.Test.Unit
 {

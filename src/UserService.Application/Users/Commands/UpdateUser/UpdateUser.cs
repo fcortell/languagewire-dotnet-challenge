@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentResults;
 using MediatR;
 using UserService.Application.Common.Errors;
-using UserService.Domain.Users.Entities;
-using UserService.Domain.Users.Events;
-using UserService.Domain.Users;
 using UserService.Application.Users.Queries;
+using UserService.Domain.Users;
+using UserService.Domain.Users.Entities;
 
 namespace UserService.Application.Users.Commands.UpdateUser
 {
@@ -23,9 +17,9 @@ namespace UserService.Application.Users.Commands.UpdateUser
 
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Result<UserDTO>>
     {
-        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IMediator? _mediator;
+        private readonly IUserRepository _userRepository;
 
         public UpdateUserCommandHandler(IUserRepository userRepository, IMapper mapper, IMediator mediator)
         {
@@ -70,7 +64,6 @@ namespace UserService.Application.Users.Commands.UpdateUser
             {
                 Error error = new Error(ex.Message);
                 return Result.Fail<UserDTO>(error);
-
             }
         }
     }

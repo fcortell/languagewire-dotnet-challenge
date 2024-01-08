@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using UserService.Domain.Users;
 using UserService.Domain.Users.Entities;
 
@@ -17,7 +12,6 @@ namespace UserService.Infrastructure.Persistence.Repositories
 
         public UserRepository(ApplicationDbContext context) : base(context)
         {
-
         }
 
         public async Task<User?> GetByEmailAsync(string email)
