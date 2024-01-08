@@ -37,6 +37,27 @@ public class UserController : BaseController
     }
 
     /// <summary>
+    /// Gets all users
+    /// </summary>
+    /// <response code="200">ID of the created user</response>
+    /// <response code="400">Validation error</response>
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserDTO>))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    [HttpGet]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        GetUsersQuery command = new GetUsersQuery();
+        var result = await Mediator.Send(command);
+
+        if (result.IsSuccess)
+        {
+            return Ok(result.Value);
+        }
+
+        return Problem();
+    }
+
+    /// <summary>
     /// Gets a user by ID
     /// </summary>
     /// <response code="200">The user</response>
