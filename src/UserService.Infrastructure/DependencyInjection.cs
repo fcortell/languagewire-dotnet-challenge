@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UserService.Application.Common.Interfaces;
-using UserService.Infrastructure.Services;
-using Microsoft.EntityFrameworkCore;
-using UserService.Domain.Users;
-using UserService.Infrastructure.Persistence.Repositories;
-using UserService.Infrastructure.Persistence;
 using UserService.Domain.Tiers;
+using UserService.Domain.Users;
+using UserService.Infrastructure.Persistence;
 using UserService.Infrastructure.Persistence.CacheRepositories;
-using Microsoft.Extensions.Caching.Memory;
+using UserService.Infrastructure.Persistence.Repositories;
+using UserService.Infrastructure.Services;
 
 namespace UserService.Infrastructure
 {
@@ -48,6 +43,5 @@ namespace UserService.Infrastructure
             });
             return services;
         }
-
     }
 }

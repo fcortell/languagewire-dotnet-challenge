@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using FluentValidation.Results;
+﻿using AutoMapper;
+using FluentResults;
 using MediatR;
-using UserService.Application.Common.Interfaces;
-using UserService.Application.Users.Queries;
+using UserService.Application.Common.Errors;
 using UserService.Domain.Users;
 using UserService.Domain.Users.Entities;
 using UserService.Domain.Users.Events;
-using FluentResults;
-using FluentValidation;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using UserService.Application.Common.Errors;
 
 namespace UserService.Application.Users.Commands.CreateUser
 {
@@ -28,9 +17,9 @@ namespace UserService.Application.Users.Commands.CreateUser
 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Result<long>>
     {
-        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IMediator? _mediator;
+        private readonly IUserRepository _userRepository;
 
         public CreateUserCommandHandler(IUserRepository userRepository, IMapper mapper, IMediator mediator)
         {
@@ -70,13 +59,12 @@ namespace UserService.Application.Users.Commands.CreateUser
                     await _mediator.Publish(new UserCreatedEvent(entity), cancellationToken);
                 }
 
-
                 return entity.Id;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Error error = new Error(ex.Message);
                 return Result.Fail<long>(error);
-         
             }
         }
     }

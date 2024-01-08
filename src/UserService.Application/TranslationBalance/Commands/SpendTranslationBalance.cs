@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentResults;
 using MediatR;
 using UserService.Application.Common.Errors;
@@ -16,14 +11,13 @@ namespace UserService.Application.TranslationBalance.Commands
 {
     public class SpendTranslationBalanceCommand : UpdateTranslationBalanceCommand
     {
-
     }
 
     public class SpendTranslationBalanceHandler : IRequestHandler<SpendTranslationBalanceCommand, Result<UserDTO>>
     {
-        private readonly IUserRepository _userRepository;
-        private readonly ITierRepository _tierRepository;
         private readonly IMapper _mapper;
+        private readonly ITierRepository _tierRepository;
+        private readonly IUserRepository _userRepository;
 
         public SpendTranslationBalanceHandler(IUserRepository userRepository, ITierRepository tierRepository, IMapper mapper)
         {
@@ -40,26 +34,26 @@ namespace UserService.Application.TranslationBalance.Commands
                 return Result.Fail<UserDTO>(new EntityNotFoundError(request.UserId));
             }
 
-            try { 
-            user.TranslationBalance -= request.Amount;
-            Tier tier = await _tierRepository.GetTierByRangeAsync(user.TranslationBalance);
-            if(user.TranslationBalance < 0)
+            try
             {
-                return Result.Fail<UserDTO>(new InsufficientTranslationBalanceError(request.UserId));
-            }
+                user.TranslationBalance -= request.Amount;
+                Tier tier = await _tierRepository.GetTierByRangeAsync(user.TranslationBalance);
+                if (user.TranslationBalance < 0)
+                {
+                    return Result.Fail<UserDTO>(new InsufficientTranslationBalanceError(request.UserId));
+                }
 
-            _userRepository.Update(user);
-            await _userRepository.CommitChangesAsync(cancellationToken);
-            UserDTO dto = _mapper.Map<UserDTO>(user);
+                _userRepository.Update(user);
+                await _userRepository.CommitChangesAsync(cancellationToken);
+                UserDTO dto = _mapper.Map<UserDTO>(user);
                 dto.Tier = tier.Name;
-            return dto;
-        }
+                return dto;
+            }
             catch (Exception ex)
             {
                 Error error = new Error(ex.Message);
                 return Result.Fail<UserDTO>(error);
-
             }
-}
+        }
     }
 }

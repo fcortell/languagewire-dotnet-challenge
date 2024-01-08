@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
 using UserService.Domain.Tiers.Entities;
 
 namespace UserService.Infrastructure.Persistence.Configuration
 {
     public class TierConfiguration : IEntityTypeConfiguration<Tier>
     {
-
         public void Configure(EntityTypeBuilder<Tier> builder)
         {
             builder.Property(u => u.Id).HasColumnName("Id");
@@ -38,7 +32,6 @@ namespace UserService.Infrastructure.Persistence.Configuration
         new Tier { Id = 3, Name = "Special", RangeStart = 100, RangeEnd = int.MaxValue }
 
 );
-
         }
     }
 }

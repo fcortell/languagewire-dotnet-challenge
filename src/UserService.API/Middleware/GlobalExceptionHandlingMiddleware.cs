@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
 namespace UserService.API.Middleware
 {
@@ -53,7 +51,6 @@ namespace UserService.API.Middleware
                     Title = ex.Message,
                     Detail = ex.StackTrace
                 };
-
 
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 

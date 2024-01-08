@@ -1,10 +1,7 @@
-﻿using FluentResults;
-using Microsoft.AspNetCore.Mvc;
-using UserService.Application.Users.Commands.CreateUser;
-using UserService.Application.Users.Queries;
+﻿using Microsoft.AspNetCore.Mvc;
 using UserService.Application.Common.Errors;
-using UserService.Application.Users.Commands.UpdateUser;
 using UserService.Application.TranslationBalance.Commands;
+using UserService.Application.Users.Queries;
 
 namespace UserService.API.Controllers;
 
@@ -12,8 +9,6 @@ namespace UserService.API.Controllers;
 [Route("translationBalance")]
 public class TranslationBalanceController : BaseController
 {
-    
-
     /// <summary>
     /// Adds translation balance to user
     /// </summary>
@@ -59,7 +54,7 @@ public class TranslationBalanceController : BaseController
             return Ok(result.Value);
         }
         var firstError = result.Errors.FirstOrDefault();
-        if(firstError is InsufficientTranslationBalanceError)
+        if (firstError is InsufficientTranslationBalanceError)
         {
             return Problem(detail: firstError.Message, statusCode: StatusCodes.Status409Conflict);
         }
@@ -95,7 +90,4 @@ public class TranslationBalanceController : BaseController
         }
         return Problem();
     }
-
-
-    
 }

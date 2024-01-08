@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using FluentResults;
+﻿using System.Net.Http.Json;
 using MediatR;
-using UserService.Application.Common.Errors;
 using UserService.Domain.Users.Entities;
 using UserService.Domain.Users.Events;
-using UserService.Domain.Users;
-using System.Net.Http.Json;
 
 namespace UserService.Application.Users.EventHandlers
 {
@@ -18,7 +9,6 @@ namespace UserService.Application.Users.EventHandlers
     {
         public Task Handle(UserCreatedEvent notification, CancellationToken cancellationToken)
         {
-
             RegisterInCrm(notification.User);
             return Task.CompletedTask;
         }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentAssertions;
 using FluentResults;
 using Moq;
@@ -16,15 +10,14 @@ namespace UserService.Application.Tests.Unit.Users.CreateUser
 {
     public class CreateUserCommandHandlerTests
     {
-        private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly IMapper _mapper;
+        private readonly Mock<IUserRepository> _userRepositoryMock;
 
         public CreateUserCommandHandlerTests()
         {
             _userRepositoryMock = new Mock<IUserRepository>();
             var mapperConfig = new MapperConfiguration(cfg =>
             {
-
             });
             _mapper = mapperConfig.CreateMapper();
         }
