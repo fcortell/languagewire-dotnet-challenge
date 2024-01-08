@@ -11,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using UserService.Domain.Users;
 using UserService.Infrastructure.Persistence.Repositories;
 using UserService.Infrastructure.Persistence;
+using UserService.Domain.Tiers;
+using UserService.Infrastructure.Persistence.CacheRepositories;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace UserService.Infrastructure
 {
@@ -37,7 +40,12 @@ namespace UserService.Infrastructure
             services.AddTransient<IDateTime, DateTimeService>();
 
             services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
-
+            services.AddScoped<TierRepository>();
+            services.AddScoped<ITierRepository>(provider =>
+            {
+                var tierRepository = provider.GetService<ITierRepository>()!;
+                return new CachedTierRepository(tierRepository, provider.GetService<IMemoryCache>()!);
+            });
             return services;
         }
 
