@@ -8,18 +8,6 @@ namespace UserService.Application.Tests.Unit.Users.CreateUser
 {
     public class CreateUserCommandValidatorTests
     {
-        private readonly IMapper _mapper;
-        private readonly Mock<IUserRepository> _userRepositoryMock;
-
-        public CreateUserCommandValidatorTests()
-        {
-            _userRepositoryMock = new Mock<IUserRepository>();
-            var mapperConfig = new MapperConfiguration(cfg =>
-            {
-            });
-            _mapper = mapperConfig.CreateMapper();
-        }
-
         [Fact]
         public async Task Handler_Should_ReturnFailureResult_WhenEmailFormatIsInvalid()
         {
