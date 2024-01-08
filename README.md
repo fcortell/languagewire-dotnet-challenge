@@ -72,7 +72,7 @@ Then you can run both the unit and acceptance tests using the test runner in you
 
 ### TODOs
 
-- [ ] Fix acceptance tests
+- [x] Fix acceptance tests
 - [ ] Add Unit of Work Pattern
 - [ ] Add infrastructure tests?
 - [ ] Add transaction table to improve control over credits balance (add/substract/spent)
