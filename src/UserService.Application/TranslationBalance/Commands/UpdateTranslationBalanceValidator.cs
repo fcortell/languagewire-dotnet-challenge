@@ -2,9 +2,9 @@
 
 namespace UserService.Application.TranslationBalance.Commands
 {
-    public class TranslationBalanceValidator : AbstractValidator<UpdateTranslationBalanceCommand>
+    public class UpdateTranslationBalanceValidator : AbstractValidator<UpdateTranslationBalanceCommand>
     {
-        public TranslationBalanceValidator()
+        public UpdateTranslationBalanceValidator()
         {
             RuleFor(v => v.UserId)
                 .NotEmpty()
