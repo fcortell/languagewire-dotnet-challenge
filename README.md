@@ -70,3 +70,15 @@ docker-compose up userservice_local_db
 
 Then you can run both the unit and acceptance tests using the test runner in your IDE. The DB gets automatically migrated if needed when running the acceptance tests.
 
+### TODOs
+
+- [ ] Fix acceptance tests
+- [ ] Add Unit of Work Pattern
+- [ ] Add infrastructure tests?
+- [ ] Add transaction table to improve control over credits balance (add/substract/spent)
+- [ ] Use EF Migrations?
+- [ ] Try to create common validation for Add/Spend/Substract translation balance
+
+### Notes
+
+- For simplicity, user balance and total spent amount are added as columns. It should be added creating another table or transaction table to keep it updated and auditable.
