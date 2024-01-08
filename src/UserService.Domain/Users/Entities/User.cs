@@ -12,5 +12,8 @@ namespace UserService.Domain.Users.Entities
         public string? Name { get; set; } = string.Empty;
 
         public string? Email { get; set; } = string.Empty;
+
+        public int? TranslationBalance { get; set; } = 0;
+
     }
 }
