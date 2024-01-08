@@ -14,4 +14,4 @@ Scenario: Try to create a user with existing email
 	Given an existing user
 	And a UserCreationRequest with the same email
 	When I send a POST request to /users
-	Then I get a Bad Request response with an error message
+	Then I get a Conflict response with an error message

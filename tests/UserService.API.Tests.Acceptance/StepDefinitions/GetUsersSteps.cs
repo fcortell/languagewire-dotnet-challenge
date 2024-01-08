@@ -16,30 +16,15 @@ using UserService.Tests.Shared.Utils;
 namespace UserService.API.Test.Acceptance.StepDefinitions;
 
 [Binding]
-public class GetUsersSteps
+public class UserSteps : StepsBase
 {
+
+    public UserSteps(ScenarioContext scenarioContext, TestFixture fixture) : base(scenarioContext, fixture) { }
+
     public const string GivenUsersKey = "GivenUsers";
+    public const string RequestBodyKey = "RequestBody";
     public const string HttpResponseKey = "HttpResponse";
     public const string IdKey = "Id";
-    public const string RequestBodyKey = "RequestBody";
-    protected readonly TestFixture _fixture;
-
-    protected readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
-    {
-        PropertyNameCaseInsensitive = true
-    };
-
-    protected readonly ScenarioContext _scenarioContext;
-    private readonly IUserRepository _userRepository;
-
-    public GetUsersSteps(ScenarioContext scenarioContext, TestFixture fixture)
-    {
-        _scenarioContext = scenarioContext;
-        _fixture = fixture;
-
-        using var scope = _fixture.ServiceProvider.CreateScope();
-        _userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
-    }
 
     [Given(@"an existing user")]
     public async Task GivenAnExistingUser()
@@ -51,24 +36,18 @@ public class GetUsersSteps
         var givenUser = new UserBuilder()
             .Build();
 
-        _userRepository.Insert(givenUser);
-        await _userRepository.CommitChangesAsync(CancellationToken.None);
+        await SaveEntity<User>(givenUser);
 
         givenUsers.Add(givenUser);
         _scenarioContext[GivenUsersKey] = givenUsers;
         _scenarioContext[IdKey] = givenUser.Id;
     }
 
-    [Given(@"a UserCreationRequest")]
-    public void GivenAUserCreationRequest()
+    [Given(@"two existing users")]
+    public async Task GivenTwoExistingUsers()
     {
-        var givenRequest = new CreateUserCommand()
-        {
-            Email = UniqueEmailGenerator.Generate(),
-            Name = "Testy"
-        };
-
-        _scenarioContext[RequestBodyKey] = givenRequest;
+        await GivenAnExistingUser();
+        await GivenAnExistingUser();
     }
 
     [Given(@"a UserCreationRequest with the same email")]
@@ -78,17 +57,22 @@ public class GetUsersSteps
         var givenRequest = new CreateUserCommand()
         {
             Email = user.Email,
-            Name = "Testy"
+            Name = "Test User"
         };
 
         _scenarioContext[RequestBodyKey] = givenRequest;
     }
 
-    [Given(@"two existing users")]
-    public async Task GivenTwoExistingUsers()
+    [Given(@"a UserCreationRequest")]
+    public void GivenAUserCreationRequest()
     {
-        await GivenAnExistingUser();
-        await GivenAnExistingUser();
+        var givenRequest = new CreateUserCommand()
+        {
+            Email = "test@test33.com",
+            Name = "Test User"
+        };
+
+        _scenarioContext[RequestBodyKey] = givenRequest;
     }
 
     [When(@"I send a (.*) request to (.*)")]
@@ -107,12 +91,12 @@ public class GetUsersSteps
         _scenarioContext[HttpResponseKey] = response;
     }
 
-    [Then(@"I get a Bad Request response with an error message")]
-    public void ThenIGetABadRequestReponseWithAnErrorMessage()
+    [Then(@"I get a Conflict response with an error message")]
+    public void ThenIGetAConflictReponseWithAnErrorMessage()
     {
         var httpResponse = (HttpResponseMessage)_scenarioContext[HttpResponseKey];
 
-        httpResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        httpResponse.StatusCode.Should().Be(HttpStatusCode.Conflict);
         var contentStream = httpResponse.Content.ReadAsStream();
         var response = JsonSerializer.Deserialize<ProblemDetails>(contentStream, _jsonOptions);
         response.Should().NotBeNull();
@@ -126,20 +110,6 @@ public class GetUsersSteps
         var httpResponse = (HttpResponseMessage)_scenarioContext[HttpResponseKey];
 
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-    }
-
-    [Then(@"I get the user")]
-    public void ThenIGetTheUser()
-    {
-        var httpResponse = (HttpResponseMessage)_scenarioContext[HttpResponseKey];
-
-        httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        var contentStream = httpResponse.Content.ReadAsStream();
-        var response = JsonSerializer.Deserialize<Result<UserDTO>>(contentStream, _jsonOptions);
-        response.Should().NotBeNull();
-
-        var givenUser = ((List<User>)_scenarioContext[GivenUsersKey]).First();
-        AssertEquivalent(response.Value!, givenUser);
     }
 
     [Then(@"I get the users")]
@@ -161,6 +131,21 @@ public class GetUsersSteps
         }
     }
 
+    [Then(@"I get the user")]
+    public void ThenIGetTheUser()
+    {
+        var httpResponse = (HttpResponseMessage)_scenarioContext[HttpResponseKey];
+
+        httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var contentStream = httpResponse.Content.ReadAsStream();
+        var response = JsonSerializer.Deserialize<UserDTO>(contentStream, _jsonOptions);
+        response.Should().NotBeNull();
+
+        var givenUser = ((List<User>)_scenarioContext[GivenUsersKey]).First();
+        AssertEquivalent(response!, givenUser);
+
+    }
+
     [Then(@"the user is persisted")]
     public async Task ThenTheUserIsPersisted()
     {
@@ -168,7 +153,7 @@ public class GetUsersSteps
         var content = await httpResponse.Content.ReadAsStringAsync();
         var id = long.Parse(content);
 
-        var user = await _userRepository.GetByIdAsync(id);
+        var user = await GetEntity<User>(id);
         user.Should().NotBeNull();
         var userCreationRequest = (CreateUserCommand)_scenarioContext[RequestBodyKey];
         userCreationRequest.Should().NotBeNull();
